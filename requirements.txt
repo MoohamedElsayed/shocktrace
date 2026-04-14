@@ -1,0 +1,12 @@
+apache-airflow-providers-google==10.13.1
+google-cloud-bigquery==3.14.1
+google-cloud-storage==2.14.0
+db-dtypes==1.2.0
+
+dbt-core==1.7.4
+dbt-bigquery==1.7.4
+
+pandas==2.1.4
+requests==2.31.0
+
+python-dotenv==1.0.0
