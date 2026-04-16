@@ -23,7 +23,7 @@ webserver_config.py
 dbt_shocktrace/target/
 dbt_shocktrace/dbt_packages/
 dbt_shocktrace/logs/
-
+dbt_shocktrace/profiles.yml
 # ── OS files ──
 .DS_Store
 Thumbs.db
@@ -37,3 +37,4 @@ desktop.ini
 
 # ── Docker ──
 *.log
+

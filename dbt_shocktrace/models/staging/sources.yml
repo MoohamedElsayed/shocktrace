@@ -1,0 +1,26 @@
+version: 2
+
+sources:
+  - name: raw
+    database: "{{ env_var('GCP_PROJECT_ID') }}"
+    schema: raw
+    description: "Raw data extracted from external APIs"
+    
+    tables:
+      - name: raw_gdelt_events
+        description: "Daily conflict events from GDELT"
+        
+      - name: raw_commodity_prices
+        description: "Daily commodity prices from FRED + currency rates from Frankfurter"
+        
+      - name: raw_disaster_events
+        description: "Natural disaster alerts from GDACS + earthquakes from USGS"
+        
+      - name: raw_weather_data
+        description: "Daily weather observations for agricultural regions from Open-Meteo"
+        
+      - name: raw_energy_data
+        description: "Energy supply/demand data from EIA"
+        
+      - name: raw_country_reference
+        description: "Country metadata and economic indicators from World Bank + REST Countries"
