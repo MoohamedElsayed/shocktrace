@@ -1,0 +1,50 @@
+version: 2
+
+models:
+  - name: int_daily_disruption_events
+    description: "Unified stream of conflicts + disasters with severity scoring"
+    columns:
+      - name: event_id
+        tests:
+          - not_null
+      - name: disruption_date
+        tests:
+          - not_null
+      - name: disruption_category
+        tests:
+          - accepted_values:
+              values: ['CONFLICT', 'NATURAL_DISASTER']
+
+  - name: int_price_anomaly_detection
+    description: "Price movements with z-scores and anomaly flags"
+    columns:
+      - name: price_date
+        tests:
+          - not_null
+      - name: series_id
+        tests:
+          - not_null
+
+  - name: int_currency_stress
+    description: "Currency volatility and stress indicators"
+    columns:
+      - name: rate_date
+        tests:
+          - not_null
+
+  - name: int_climate_agricultural_stress
+    description: "Weather anomalies mapped to agricultural commodity risk"
+    columns:
+      - name: observation_date
+        tests:
+          - not_null
+      - name: region_id
+        tests:
+          - not_null
+
+  - name: int_ripple_chain_candidates
+    description: "Links disruption events to price movements"
+    columns:
+      - name: event_id
+        tests:
+          - not_null

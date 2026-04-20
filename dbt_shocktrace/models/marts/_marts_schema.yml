@@ -1,0 +1,69 @@
+version: 2
+
+models:
+  - name: mart_daily_ripple_index
+    description: "Daily 0-100 score measuring global economic disruption"
+    columns:
+      - name: index_date
+        tests:
+          - not_null
+          - unique
+      - name: ripple_index
+        tests:
+          - not_null
+      - name: risk_level
+        tests:
+          - accepted_values:
+              values: ['SEVERE', 'HIGH', 'ELEVATED', 'LOW']
+
+  - name: mart_active_ripple_chains
+    description: "Active event-to-price impact chains"
+
+  - name: mart_country_vulnerability_score
+    description: "Country vulnerability combining static + live risk"
+    columns:
+      - name: country_code
+        tests:
+          - not_null
+          - unique
+
+  - name: mart_commodity_forecast_signals
+    description: "Leading indicators for commodity price movements"
+
+  - name: mart_daily_briefing
+    description: "One-row-per-day summary for the dashboard"
+    columns:
+      - name: briefing_date
+        tests:
+          - not_null
+          - unique
+
+
+
+  - name: mart_looker_ripple_overview
+    description: "Flat table for Looker Studio - Ripple Index overview"
+    columns:
+      - name: index_date
+        tests:
+          - not_null
+
+  - name: mart_looker_disruption_map
+    description: "Geo-located disruptions for Looker Studio map"
+    columns:
+      - name: event_id
+        tests:
+          - not_null
+
+  - name: mart_looker_price_movements
+    description: "Price tracking with anomaly flags for Looker Studio"
+    columns:
+      - name: price_date
+        tests:
+          - not_null
+
+  - name: mart_looker_country_risk
+    description: "Country risk heatmap data for Looker Studio"
+    columns:
+      - name: country_code
+        tests:
+          - not_null

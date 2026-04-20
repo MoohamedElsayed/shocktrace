@@ -95,8 +95,10 @@ def extract_gdelt_conflict_events(**context):
             SOURCEURL AS source_url,
             CURRENT_TIMESTAMP() AS ingested_at,
             '{execution_date}' AS pipeline_date
-        FROM `gdelt-bq.gdeltv2.events`
-        WHERE SQLDATE = {formatted_date}
+        FROM `gdelt-bq.gdeltv2.events_partitioned`
+        WHERE _PARTITIONTIME >= TIMESTAMP('{execution_date}')
+            AND _PARTITIONTIME < TIMESTAMP_ADD(TIMESTAMP('{execution_date}'), INTERVAL 1 DAY)
+            AND SQLDATE = {formatted_date}
             AND EventRootCode IN ({code_list})
             AND (
                 Actor1CountryCode IN ({country_list})

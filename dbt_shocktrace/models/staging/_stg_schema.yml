@@ -1,0 +1,62 @@
+version: 2
+
+models:
+  - name: stg_conflict_events
+    description: "Cleaned GDELT conflict events in global hotspot regions"
+    columns:
+      - name: event_id
+        tests:
+          - not_null
+      - name: event_date
+        tests:
+          - not_null
+      - name: severity_level
+        tests:
+          - accepted_values:
+              values: ['EXTREME', 'HIGH', 'MODERATE', 'LOW']
+
+  - name: stg_commodity_prices
+    description: "Daily commodity prices and currency rates"
+    columns:
+      - name: price_date
+        tests:
+          - not_null
+      - name: price_value
+        tests:
+          - not_null
+      - name: price_category
+        tests:
+          - accepted_values:
+              values: ['OIL', 'GAS', 'CURRENCY', 'OTHER']
+
+  - name: stg_disaster_events
+    description: "Natural disaster alerts from GDACS and USGS"
+    columns:
+      - name: event_id
+        tests:
+          - not_null
+
+  - name: stg_energy_data
+    description: "Energy supply/demand metrics from EIA"
+    columns:
+      - name: series_id
+        tests:
+          - not_null
+
+  - name: stg_weather_data
+    description: "Daily weather observations for agricultural regions"
+    columns:
+      - name: observation_date
+        tests:
+          - not_null
+      - name: region_id
+        tests:
+          - not_null
+
+  - name: stg_country_reference
+    description: "Country metadata and economic indicators"
+    columns:
+      - name: country_code
+        tests:
+          - not_null
+          - unique

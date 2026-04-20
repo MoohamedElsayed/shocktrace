@@ -19,7 +19,12 @@ models:
       +materialized: view
       +schema: staging
     intermediate:
-      +materialized: ephemeral
+      +materialized: view
+      +schema: intermediate
     marts:
       +materialized: table
       +schema: marts
+
+seeds:
+  shocktrace:
+    +schema: seeds

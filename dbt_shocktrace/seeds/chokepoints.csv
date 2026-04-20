@@ -1,0 +1,9 @@
+chokepoint_id,chokepoint_name,latitude,longitude,affected_trade_pct,primary_commodity,nearby_countries
+SUEZ,Suez Canal,30.4575,32.3500,12,OIL,EGY ISR SAU
+HORMUZ,Strait of Hormuz,26.5667,56.2500,21,OIL,IRN OMN ARE
+MALACCA,Strait of Malacca,2.5000,101.8000,25,OTHER,MYS SGP IDN
+PANAMA,Panama Canal,9.0000,-79.5000,5,OTHER,PAN COL
+BOSPORUS,Turkish Straits,41.0000,29.0000,3,OIL,TUR RUS UKR
+BAB,Bab el-Mandeb,12.5833,43.3333,9,OIL,YEM DJI ERI
+CAPE,Cape of Good Hope,-34.3568,18.4740,0,OIL,ZAF MOZ
+DOVER,Strait of Dover,51.0000,1.5000,0,OTHER,GBR FRA

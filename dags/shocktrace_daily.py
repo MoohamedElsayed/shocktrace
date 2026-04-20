@@ -1,8 +1,6 @@
-# main DAG that runs daily
-
-
 from airflow import DAG
 from airflow.operators.python import PythonOperator
+from airflow.operators.bash import BashOperator
 from airflow.operators.empty import EmptyOperator
 from datetime import timedelta
 import pendulum
@@ -15,6 +13,18 @@ from scripts.extract_energy import extract_energy_data
 from scripts.extract_reference import extract_reference_data
 
 
+# ── dbt command helper ──────────────────────────────────
+DBT_DIR = '/opt/airflow/dbt_shocktrace'
+DBT_CMD = (
+    'unset AIRFLOW__LOGGING__LOGGING_LEVEL && '
+    'unset AIRFLOW__LOGGING__BASE_LOG_FOLDER && '
+    'unset AIRFLOW__LOGGING__DAG_PROCESSOR_MANAGER_LOG_LOCATION && '
+    'unset AIRFLOW_HOME && '
+    f'cd {DBT_DIR} && '
+    'dbt {cmd} --profiles-dir .'
+)
+
+
 daily_args = {
     'owner': 'shocktrace',
     'depends_on_past': False,
@@ -23,23 +33,17 @@ daily_args = {
     'retry_delay': timedelta(minutes=5),
 }
 
-
-
-
 with DAG(
     dag_id='shocktrace_daily_pipeline',
     default_args=daily_args,
-    description='Daily: conflicts + prices + disasters + weather + energy',
+    description='Daily: extract → transform → serve',
     schedule_interval='0 7 * * *',
     start_date=pendulum.datetime(2025, 1, 1, tz='UTC'),
     catchup=False,
     tags=['shocktrace', 'daily', 'production'],
 ) as daily_dag:
-    
 
     start = EmptyOperator(task_id='start')
-
-
 
     extract_gdelt = PythonOperator(
         task_id='extract_gdelt_conflicts',
@@ -66,40 +70,27 @@ with DAG(
         python_callable=extract_energy_data,
     )
 
-    extraction_complete = EmptyOperator(
-        task_id='extraction_complete',
+    extraction_complete = EmptyOperator(task_id='extraction_complete')
+
+    dbt_run = BashOperator(
+        task_id='dbt_run',
+        bash_command=DBT_CMD.format(cmd='run'),
     )
 
-
-
+    dbt_test = BashOperator(
+        task_id='dbt_test',
+        bash_command=DBT_CMD.format(cmd='test'),
+    )
 
     end = EmptyOperator(task_id='end')
 
-
-
-
-
-   
     start >> [
         extract_gdelt,
         extract_prices,
         extract_disasters,
         extract_weather,
         extract_energy,
-    ]
-
-    [
-        extract_gdelt,
-        extract_prices,
-        extract_disasters,
-        extract_weather,
-        extract_energy,
-    ] >> extraction_complete >> end
-
-
-
-
-
+    ] >> extraction_complete >> dbt_run >> dbt_test >> end
 
 
 weekly_args = {
@@ -114,7 +105,7 @@ with DAG(
     dag_id='shocktrace_weekly_reference',
     default_args=weekly_args,
     description='Weekly: country metadata + economic indicators',
-    schedule_interval='0 6 * * 0', 
+    schedule_interval='0 6 * * 0',
     start_date=pendulum.datetime(2025, 1, 1, tz='UTC'),
     catchup=False,
     tags=['shocktrace', 'weekly', 'reference'],
